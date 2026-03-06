@@ -1,11 +1,12 @@
 import request from "supertest";
-import app from "../src/app.js";
+import { getApp } from "./setup.js";
 
 describe("Auth Routes", () => {
 
   let token;
 
   it("should register a user", async () => {
+    const app = getApp();
     const res = await request(app)
       .post("/api/auth/register")
       .send({
@@ -19,6 +20,7 @@ describe("Auth Routes", () => {
   });
 
   it("should login user and return token", async () => {
+    const app = getApp();
     const res = await request(app)
       .post("/api/auth/login")
       .send({

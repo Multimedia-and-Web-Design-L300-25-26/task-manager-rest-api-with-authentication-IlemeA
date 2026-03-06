@@ -1,10 +1,12 @@
 import request from "supertest";
-import app from "../src/app.js";
+import { getApp } from "./setup.js";
 
 let token;
 let taskId;
 
 beforeAll(async () => {
+  const app = getApp();
+  
   // Register
   await request(app)
     .post("/api/auth/register")
@@ -28,6 +30,7 @@ beforeAll(async () => {
 describe("Task Routes", () => {
 
   it("should not allow access without token", async () => {
+    const app = getApp();
     const res = await request(app)
       .get("/api/tasks");
 
@@ -35,6 +38,7 @@ describe("Task Routes", () => {
   });
 
   it("should create a task", async () => {
+    const app = getApp();
     const res = await request(app)
       .post("/api/tasks")
       .set("Authorization", `Bearer ${token}`)
@@ -50,6 +54,7 @@ describe("Task Routes", () => {
   });
 
   it("should get user tasks only", async () => {
+    const app = getApp();
     const res = await request(app)
       .get("/api/tasks")
       .set("Authorization", `Bearer ${token}`);
