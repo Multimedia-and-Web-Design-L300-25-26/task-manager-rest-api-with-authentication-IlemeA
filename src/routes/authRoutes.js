@@ -3,6 +3,19 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+// Email validation regex
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// Password strength validation
+const isStrongPassword = (password) => {
+  // Min 8 chars, at least one uppercase, one lowercase, and one number
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  return passwordRegex.test(password);
+};
+
 const router = express.Router();
 
 // POST /api/auth/register
@@ -13,6 +26,18 @@ router.post("/register", async (req, res) => {
     
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Please provide all fields" });
+    }
+    
+    // - Validate email format
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Please provide a valid email address" });
+    }
+    
+    // - Validate password strength
+    if (!isStrongPassword(password)) {
+      return res.status(400).json({ 
+        message: "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number" 
+      });
     }
     
     // - Check if user exists

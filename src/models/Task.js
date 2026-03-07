@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 // - title (String, required)
 // - description (String)
 // - completed (Boolean, default false)
+// - dueDate (Date)
+// - priority (String, enum: low, medium, high, default: medium)
 // - owner (ObjectId, ref "User", required)
 // - createdAt (default Date.now)
 
@@ -19,6 +21,14 @@ const taskSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false
+  },
+  dueDate: {
+    type: Date
+  },
+  priority: {
+    type: String,
+    enum: ["low", "medium", "high"],
+    default: "medium"
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
